@@ -3,10 +3,15 @@ package Restaurant;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import Clients.Clients;
 import Clients.Mutra;
@@ -148,6 +153,28 @@ public class Restaurant {
 	public void printSortedMeals(){
 		
 	}
-	
+	public void printMenuSorted(){
+		System.out.println("---------Restaurant "+this.name+" -----------");
+		for (Entry <MenuType, HashMap<SectionType, ArrayList<Menu>>> type : menu.entrySet()) {
+			System.out.println("------ "+type.getKey()+"'S ---------");
+			SortedSet<Map.Entry<SectionType, Integer>> sorted = new TreeSet<>(new Comparator<Map.Entry<SectionType, Integer>>(){
+				@Override
+				public int compare(Entry<SectionType, Integer> o1, Entry<SectionType, Integer> o2) {
+					if(o1.getValue()==o2.getValue()){
+						return 1;
+					}
+					return o2.getValue()-o1.getValue();
+				}
+			});
+			SortedMap<SectionType, Integer> tempMap = new TreeMap<>();
+			for (Entry<SectionType, ArrayList<Menu>> section : type.getValue().entrySet()) {
+				tempMap.put(section.getKey(), section.getValue().size());
+			}
+			sorted.addAll(tempMap.entrySet());
+			for (Entry<SectionType, Integer> entry : sorted) {
+				System.out.println("    - "+entry.getKey()+" - "+entry.getValue()+" portions");
+			}
+		}
+	}
 
 }
